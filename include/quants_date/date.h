@@ -18,6 +18,7 @@ namespace qd {
     public:
         date(inner_date_type&& data);
         date(const inner_date_type& data);
+        bool operator< (const date& other) const;
 
     public:
         template <typename E>
@@ -40,6 +41,12 @@ namespace qd {
     inline date<D>::date(const inner_date_type& data)
         : _data(data)
     {
+    }
+
+    template<typename D>
+    inline bool date<D>::operator<(const date& other) const
+    {
+        return this->_data < other._data;
     }
 
     template<typename D>
