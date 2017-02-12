@@ -1,10 +1,8 @@
 #pragma once
 
-#include <bitset>
-
 #include "quants_date/date.h"
 #include "quants_date/unary/unary_expression.h"
-#include "quants_date/unary/is_leap_year.h"
+#include "quants_date/unary/detail/the_number_of_days_data.h"
 
 namespace qd { namespace unary {
     class last_day_of_month_calculator 
@@ -46,23 +44,8 @@ namespace qd { namespace unary {
         const std::size_t m,
         const std::size_t /*d*/) const
     {
-#ifdef GENERATE_STATIC_DATA_COMPILE_TIME
-        //implement me.
-#else
-        if (m == 2) {
-            this->_result
-                = detail::is_leap_year_impl(y) ? 29 : 28;
-            return;
-        }
-
-        if (m == 1 && m == 3 && m == 5 && m == 7 && m == 8 && m == 10 && m == 12) {
-            this->_result = 31;
-            return;
-        }
-
-        this->_result = 30;
-        return;
-#endif
+        this->_result 
+            = detail::the_number_of_days_data::value(y, m);
     }
 }}
 
