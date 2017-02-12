@@ -1,12 +1,8 @@
 #include <iostream>
 
-#include "quants_date/builder/date_builder.h"
 #include "quants_date/date.h"
 #include "quants_date/unary.h"
-
-#include "quants_date/mpl/is_leap_year.h"
-#include "quants_date/mpl/generate_array.h"
-#include "quants_date/mpl/the_number_of_days_data.h"
+#include "quants_date/builder/date_builder.h"
 
 class Date {
 public:
@@ -54,32 +50,43 @@ namespace qd { namespace builder {
     };
 }}
 
+void test_compare(const qd::date<Date>& d0, const qd::date<Date>& d1);
+void test_unary(const qd::date<Date>& d);
+
 int main()
 {
-    //const auto d0 = qd::create_date<Date>(2000, 2, 29);
-    //const auto d1 = qd::create_date<Date>(2000, 5, 31);
-    //std::cout << qd::to_string<'-'>(d0) << std::endl;
-    //std::cout << std::boolalpha << qd::is_leap_year(d0) << std::endl;
-    //std::cout << qd::last_day_of_month(d0) << std::endl;
-    //std::cout << qd::to_string<'-'>(qd::add_day(d1, 365)) << std::endl;
-    //std::cout << qd::to_string<'-'>(qd::add_week(d1, 2)) << std::endl;
-    //std::cout << qd::to_string<'-'>(qd::add_month(d1, 1)) << std::endl;
-    //std::cout << qd::to_string<'-'>(qd::add_year(d0, 3)) << std::endl;
+    test_compare(
+        qd::create_date<Date>(2000, 2, 29),
+        qd::create_date<Date>(2000, 5, 1));
+    test_compare(
+        qd::create_date<Date>(2000, 2, 29),
+        qd::create_date<Date>(2000, 2, 29));
 
-    const auto d0 = qd::create_date<Date>(1900, 1, 1);
-    std::size_t buf;
-    for (int n = 0; n < 3; ++n) {
-        for (int i = 0; i < 365 * 250; ++i) {
-            const auto tmp = qd::add_day(d0, i);
-            buf = qd::to_serial_value(tmp);
-        }
-    }
-
-    //for (std::size_t i = 1; i < 365 * 250; ++i) {
-    //    const auto tmp = qd::create_date<Date>(i);
-    //    std::cout << qd::to_string<'/'>(tmp) << "," << i << std::endl;
-    //}
-
+    test_unary(qd::create_date<Date>(2000, 2, 29));
+    test_unary(qd::create_date<Date>(2013, 6, 1));
 
     return 0;
+}
+
+void test_compare(const qd::date<Date>& d0, const qd::date<Date>& d1)
+{
+    std::cout << std::boolalpha << (d0 < d1) << std::endl;
+    std::cout << std::boolalpha << (d0 > d1) << std::endl;
+    std::cout << std::boolalpha << (d0 == d1) << std::endl;
+    std::cout << std::boolalpha << (d0 != d1) << std::endl;
+    std::cout << std::boolalpha << (d0 <= d1) << std::endl;
+    std::cout << std::boolalpha << (d0 >= d1) << std::endl;
+    return;
+}
+
+void test_unary(const qd::date<Date>& d)
+{
+    std::cout << qd::to_string<'-'>(d) << std::endl;
+    std::cout << qd::to_string<'-'>(qd::add_day(d, 365)) << std::endl;
+    std::cout << qd::to_string<'-'>(qd::add_week(d, 2)) << std::endl;
+    std::cout << qd::to_string<'-'>(qd::add_month(d, 1)) << std::endl;
+    std::cout << qd::to_string<'-'>(qd::add_year(d, 3)) << std::endl;
+    std::cout << qd::last_day_of_month(d) << std::endl;
+    std::cout << qd::to_serial_value(d) << std::endl;
+    std::cout << std::boolalpha << qd::is_leap_year(d) << std::endl;
 }
