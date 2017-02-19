@@ -52,6 +52,7 @@ namespace qd { namespace builder {
 
 void test_compare(const qd::date<Date>& d0, const qd::date<Date>& d1);
 void test_unary(const qd::date<Date>& d);
+void test_binary(const qd::date<Date>& d0, const qd::date<Date>& d1);
 
 int main()
 {
@@ -89,4 +90,8 @@ void test_unary(const qd::date<Date>& d)
     std::cout << qd::last_day_of_month(d) << std::endl;
     std::cout << qd::to_serial_value(d) << std::endl;
     std::cout << std::boolalpha << qd::is_leap_year(d) << std::endl;
+}
+
+void test_binary(const qd::date<Date>& d0, const qd::date<Date>& d1)
+{
 }
