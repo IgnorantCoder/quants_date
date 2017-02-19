@@ -7,34 +7,54 @@ namespace qd {
     template <typename D>
     class date_range {
     public:
+        using inner_date_type = D;
+
+    private:
+        static_assert(
+            type_traits::is_date_compatible<inner_date_type>::value,
+            "D is not compatible to this adaptor.");
+
+    public:
         date_range(
-            const date<D>& from,
-            const date<D>& to);
+            const inner_date_type& from,
+            const inner_date_type& to);
+        date_range(
+            inner_date_type&& from,
+            inner_date_type&& to);
 
     public:
         template <typename E>
-        void accept(unary::binary_expression<E>& binary) const;
+        void accept(binary::binary_expression<E>& binary) const;
 
         template <typename E>
-        void accept(const unary::binary_expression<E>& binary) const;
+        void accept(const binary::binary_expression<E>& binary) const;
 
     private:
-        date<D> _from;
-        date<D> _to;
+        inner_date_type _from;
+        inner_date_type _to;
     };
 
     template<typename D>
     inline date_range<D>::date_range(
-        const date<D>& from, 
-        const date<D>& to)
+        const inner_date_type & from, 
+        const inner_date_type & to)
         : _from(from),
         _to(to)
     {
     }
 
     template<typename D>
+    inline date_range<D>::date_range(
+        inner_date_type&& from,
+        inner_date_type&& to)
+        : _from(std::move(from)),
+        _to(std::move(to))
+    {
+    }
+
+    template<typename D>
     template<typename E>
-    inline void date_range<D>::accept(unary::binary_expression<E>& binary) const
+    inline void date_range<D>::accept(binary::binary_expression<E>& binary) const
     {
         binary.apply(
             _from.year(),
@@ -48,7 +68,7 @@ namespace qd {
 
     template<typename D>
     template<typename E>
-    inline void date_range<D>::accept(const unary::binary_expression<E>& binary) const
+    inline void date_range<D>::accept(const binary::binary_expression<E>& binary) const
     {
         binary.apply(
             _from.year(),
@@ -59,4 +79,5 @@ namespace qd {
             _to.day());
         return;
     }
+
 }

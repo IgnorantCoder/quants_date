@@ -1,8 +1,18 @@
 #include <iostream>
 
+#include <tuple>
+
 #include "quants_date/date.h"
 #include "quants_date/unary.h"
+
 #include "quants_date/builder/date_builder.h"
+#include "quants_date/builder/date_range_builder.h"
+
+#include "quants_date/binary/day_count_fraction.h"
+#include "quants_date/binary/day_count_convention/pay_frequency.h"
+#include "quants_date/binary/day_count_convention/one_one.h"
+#include "quants_date/binary/day_count_convention/actual_actual.h"
+#include "quants_date/binary/day_count_convention/actual_actual_icma.h"
 
 class Date {
 public:
@@ -28,24 +38,22 @@ private:
 namespace qd { namespace builder {
     template <>
     struct create_null_object_traits<Date> {
-        using result_type = date<Date>;
+        using result_type = Date;
         static result_type apply()
         {
-            Date&& nullobj = {};
-            return result_type(std::move(nullobj));
+            return result_type();
         }
     };
 
     template <>
     struct create_from_ymd_traits<Date> {
-        using result_type = date<Date>;
+        using result_type = Date;
         static result_type apply(
             const std::size_t y,
             const std::size_t m,
             const std::size_t d)
         {
-            Date&& data = { y, m, d };
-            return result_type(std::move(data));
+            return result_type(y, m, d);
         }
     };
 }}
@@ -65,6 +73,16 @@ int main()
 
     test_unary(qd::create_date<Date>(2000, 2, 29));
     test_unary(qd::create_date<Date>(2013, 6, 1));
+
+    const auto r = qd::create_date_range<Date>(
+        std::make_tuple(2000u, 1u, 15u),
+        std::make_tuple(2000u, 4u, 15u));
+    const auto ret = qd::day_count_fraction(
+        r,
+        qd::binary::dcc::actual_actual_icma<
+            Date,
+            qd::binary::dcc::quarterly
+        >(qd::create_date<Date>(2000, 4, 17)));
 
     return 0;
 }

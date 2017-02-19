@@ -3,13 +3,13 @@
 #include <cstddef>
 
 #include "quants_date/date_range.h"
-#include "quants_date/unary/detail/the_sum_of_days_data.h"
 #include "quants_date/binary/binary_expression.h"
+#include "quants_date/binary/detail/count_days_impl.h"
 
 namespace qd { namespace binary {
-    class day_counter : public binary_expression<day_counter> {
+    class days_counter : public binary_expression<days_counter> {
     private:
-        using base_type = binary_expression<day_counter>;
+        using base_type = binary_expression<days_counter>;
         friend class base_type;
 
     public:
@@ -31,12 +31,12 @@ namespace qd { namespace binary {
         mutable result_type _result;
     };
 
-    typename day_counter::result_type day_counter::get() const
+    typename days_counter::result_type days_counter::get() const
     {
         return _result;
     }
 
-    void day_counter::do_apply(
+    void days_counter::do_apply(
         const std::size_t from_y,
         const std::size_t from_m,
         const std::size_t from_d,
@@ -44,30 +44,20 @@ namespace qd { namespace binary {
         const std::size_t to_m,
         const std::size_t to_d) const
     {
-        const auto x0
-            = unary::detail::to_serial_value_impl(from_y, from_m, from_d);
-        const auto x1
-            = unary::detail::to_serial_value_impl(to_y, to_m, to_d);
-
         this->_result
-            = static_cast<int>(x1) - static_cast<int>(x0);
+            = detail::count_days_impl(
+                from_y, from_m, from_d,
+                to_y, to_m, to_d);
     }
 }}
 
 namespace qd {
     template<typename D>
-    binary::day_counter::result_type
-    count_day(const date_range<D>& d)
+    binary::days_counter::result_type
+    count_days(const date_range<D>& d)
     {
-        const binary::day_counter calculator;
+        const binary::days_counter calculator;
         d.accept(calculator);
         return calculator.get();
-    }
-
-    template<typename D>
-    binary::day_counter::result_type
-    count_day(const date<D>& from, const date<D>& to)
-    {
-        return count_day(date_range<D>(from, to));
     }
 }
