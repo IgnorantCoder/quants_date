@@ -5,7 +5,7 @@
 #include "quants_date/date.h"
 #include "quants_date/math/binary_search.h"
 #include "quants_date/unary/unary_expression.h"
-#include "quants_date/unary/detail/the_number_of_accumulate_days_data.h"
+#include "quants_date/unary/detail/the_sum_of_days_data.h"
 
 namespace qd { namespace unary {
     class serial_value_calculator

@@ -3,7 +3,7 @@
 #include <cstddef>
 
 #include "quants_date/date_range.h"
-#include "quants_date/unary/detail/the_number_of_accumulate_days_data.h"
+#include "quants_date/unary/detail/the_sum_of_days_data.h"
 #include "quants_date/binary/binary_expression.h"
 
 namespace qd { namespace binary {

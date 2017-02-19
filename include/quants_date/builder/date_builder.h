@@ -34,7 +34,7 @@ namespace qd {
     auto create_date(const std::size_t serial_value)
         -> decltype(create_date<D>(1900, 1, 1))
     {
-        using data = qd::unary::detail::the_number_of_accumulate_days_data;
+        using data = qd::unary::detail::the_sum_of_days_data;
         const auto ym = data::find(serial_value);
         const auto y = ym.first;
         const auto m = ym.second;
