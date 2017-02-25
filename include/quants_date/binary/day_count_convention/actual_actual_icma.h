@@ -11,11 +11,10 @@
 #include "quants_date/binary/day_count_convention/pay_frequency.h"
 
 namespace qd { namespace binary { namespace dcc {
-    template <typename D, typename F>
+    template <typename F>
     class actual_actual_icma 
-        : public day_count_convention_expression<actual_actual_icma<D, F>> {
+        : public day_count_convention_expression<actual_actual_icma<F>> {
     public:
-        using inner_date_type = D;
         using frequency_type = F;
 
     private:
@@ -24,7 +23,8 @@ namespace qd { namespace binary { namespace dcc {
             "F must be frequency_type");
 
     public:
-        actual_actual_icma(const date<inner_date_type>& payment_date);
+        template <typename D>
+        actual_actual_icma(const date<D>& payment_date);
         actual_actual_icma(const actual_actual_icma& other);
 
     public:
@@ -37,25 +37,26 @@ namespace qd { namespace binary { namespace dcc {
             const std::size_t to_d) const;
 
     private:
-        date<inner_date_type> _payment_date;
+        std::size_t  _serial_value_of_payment_date;
     };
 
-    template<typename D, typename F>
-    inline actual_actual_icma<D, F>::actual_actual_icma(
-        const date<inner_date_type>& payment_date)
-        : _payment_date(payment_date)
+    template<typename F>
+    template <typename D>
+    inline actual_actual_icma<F>::actual_actual_icma(
+        const date<D>& payment_date)
+        : _serial_value_of_payment_date(unary::to_serial_value(payment_date))
     {
     }
 
-    template<typename D, typename F>
-    inline actual_actual_icma<D, F>::actual_actual_icma(
-        const actual_actual_icma & other)
-        : _payment_date(other._payment_date)
+    template<typename F>
+    inline actual_actual_icma<F>::actual_actual_icma(
+        const actual_actual_icma<F> & other)
+        : _serial_value_of_payment_date(other._serial_value_of_payment_date)
     {
     }
 
-    template<typename D, typename F>
-    inline double actual_actual_icma<D, F>::calculate_day_count(
+    template<typename F>
+    inline double actual_actual_icma<F>::calculate_day_count(
         const std::size_t from_y, 
         const std::size_t from_m, 
         const std::size_t from_d, 
@@ -66,8 +67,10 @@ namespace qd { namespace binary { namespace dcc {
         const double numerator
             = detail::count_days_impl(from_y, from_m, from_d, to_y, to_m, to_d);
         const double dominator
-            = to_serial_value(this->_payment_date)
+            = this->_serial_value_of_payment_date
             - unary::detail::to_serial_value_impl(from_y, from_m, from_d);
-        return (numerator / dominator) * frequency_type::coupon_factor;
+        const double coeffcient
+            = frequency_type::coupon_factor / dominator;
+        return numerator * coeffcient;
     }
 }}}

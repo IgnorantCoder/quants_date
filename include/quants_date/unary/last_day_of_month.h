@@ -44,8 +44,7 @@ namespace qd { namespace unary {
         const std::size_t m,
         const std::size_t /*d*/) const
     {
-        this->_result 
-            = detail::the_number_of_days_data::value(y, m);
+        this->_result = detail::last_day_of_month_impl(y, m);
     }
 }}
 

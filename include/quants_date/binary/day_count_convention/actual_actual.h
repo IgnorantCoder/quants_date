@@ -7,7 +7,8 @@
 #include "quants_date/binary/day_count_convention/day_count_convention_expression.h"
 
 namespace qd { namespace binary { namespace dcc {
-    class actual_actual : public day_count_convention_expression<actual_actual> {
+    class actual_actual
+        : public day_count_convention_expression<actual_actual> {
     private:
         static constexpr double leap_year_coeffcient = 1. / 366.;
         static constexpr double noleap_year_coeffcient = 1. / 365.;

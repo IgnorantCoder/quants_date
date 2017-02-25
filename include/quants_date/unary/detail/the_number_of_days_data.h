@@ -319,4 +319,11 @@ namespace qd { namespace unary { namespace detail {
 
         return d[y - 1900][m - 1];
     }
+
+    std::size_t last_day_of_month_impl(
+        const std::size_t y,
+        const std::size_t m)
+    {
+        return detail::the_number_of_days_data::value(y, m);
+    }
 }}}

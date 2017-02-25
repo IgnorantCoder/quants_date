@@ -8,12 +8,6 @@
 #include "quants_date/builder/date_builder.h"
 #include "quants_date/builder/date_range_builder.h"
 
-#include "quants_date/binary/day_count_fraction.h"
-#include "quants_date/binary/day_count_convention/pay_frequency.h"
-#include "quants_date/binary/day_count_convention/one_one.h"
-#include "quants_date/binary/day_count_convention/actual_actual.h"
-#include "quants_date/binary/day_count_convention/actual_actual_icma.h"
-
 class Date {
 public:
     Date() : _y(), _m(), _d() {}
