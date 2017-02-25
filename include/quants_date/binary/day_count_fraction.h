@@ -3,11 +3,14 @@
 #include <algorithm>
 #include <string>
 #include <limits>
+#include <type_traits>
+#include <functional>
 
+#include "quants_date/date.h"
 #include "quants_date/date_range.h"
+#include "quants_date/string_algorithm/to_lower.h"
 #include "quants_date/binary/binary_expression.h"
 #include "quants_date/binary/day_count_convention/day_count_convention_expression.h"
-
 #include "quants_date/binary/day_count_convention/actual_360.h"
 #include "quants_date/binary/day_count_convention/actual_365_fixed.h"
 #include "quants_date/binary/day_count_convention/actual_365l.h"
@@ -89,53 +92,5 @@ namespace qd {
         const binary::day_count_fraction<C> calculator(convention());
         d.accept(calculator);
         return calculator.get();
-    }
-
-    template<typename D>
-    double day_count_fraction(
-        const date_range<D>& d,
-        const std::string& convention)
-    {
-        std::string lower_convention(convention.size());
-        std::transform(
-            convention.cbegin(),
-            convention.cend(),
-            lower_convention.begin(),
-            ::tolower);
-
-        switch (lower_convention) {
-        case "actual/360":
-        case "act/360":
-        case "a/360":
-        case "french":
-            return day_count_fraction(d, binary::dcc::actual_360);
-        case "act/365fixed":
-        case "a/365fixed":
-        case "a/365f":
-        case "english":
-            return day_count_fraction(d, binary::dcc::actual_365_fixed);
-        case "actual/actual":
-        case "actual/actualisda":
-        case "act/act":
-        case "actual/365":
-        case "act/365":
-            return day_count_fraction(d, binary::dcc::actual_actual);
-        case "one/one":
-        case "1/1":
-            return day_count_fraction(d, binary::dcc::one_one);
-        case "30/360bondbasis":
-        case "30a/360":
-            return day_count_fraction(d, binary::dcc::thirty_360_bond_basis);
-        case "30e/360":
-        case "30/360icma":
-        case "30s/360":
-        case "eurobondbasis":
-        case "specialgerman":
-            return day_count_fraction(d, binary::dcc::thirty_e_360);
-        }
-
-        return std::numeric_limits<
-            typename binary::day_count_fraction<C>::result_type
-        >::quiet_NaN();
     }
 }

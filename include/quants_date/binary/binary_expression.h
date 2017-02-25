@@ -7,6 +7,9 @@ namespace qd { namespace binary {
         using expression_type = E;
 
     public:
+        virtual ~binary_expression() = default;
+
+    public:
         void apply(
             const std::size_t from_y,
             const std::size_t from_m,

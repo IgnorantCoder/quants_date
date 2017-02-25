@@ -37,8 +37,8 @@ namespace qd { namespace binary { namespace dcc {
         const std::size_t to_m,
         const std::size_t to_d) const
     {
-        const int y = static_cast<int>(from_y) - static_cast<int>(to_y);
-        const int m = static_cast<int>(from_m) - static_cast<int>(to_m);
+        const int y = static_cast<int>(to_y) - static_cast<int>(from_y);
+        const int m = static_cast<int>(to_m) - static_cast<int>(from_m);
 
         const int adjusted_from_d 
             = std::min(static_cast<int>(from_d), 30);
@@ -46,7 +46,7 @@ namespace qd { namespace binary { namespace dcc {
             = adjusted_from_d == 30
             ? std::min(static_cast<int>(to_d), 30)
             : to_d;
-        const int d = adjusted_from_d - adjusted_to_d;
+        const int d = adjusted_to_d - adjusted_from_d;
 
         return y + m / 12. + d / 360.;
     }

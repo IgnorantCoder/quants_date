@@ -44,7 +44,7 @@ namespace qd { namespace binary { namespace dcc {
     template <typename D>
     inline actual_actual_icma<F>::actual_actual_icma(
         const date<D>& payment_date)
-        : _serial_value_of_payment_date(unary::to_serial_value(payment_date))
+        : _serial_value_of_payment_date(to_serial_value(payment_date))
     {
     }
 

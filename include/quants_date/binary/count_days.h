@@ -56,7 +56,7 @@ namespace qd {
     binary::days_counter::result_type
     count_days(const date_range<D>& d)
     {
-        const binary::days_counter calculator;
+        const binary::days_counter calculator = {};
         d.accept(calculator);
         return calculator.get();
     }

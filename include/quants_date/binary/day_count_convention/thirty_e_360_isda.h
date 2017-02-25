@@ -32,7 +32,7 @@ namespace qd { namespace binary { namespace dcc {
     template <typename D>
     inline thirty_e_360_isda::thirty_e_360_isda(
         const date<D>& maturity_date)
-        : _serial_value_of_maturity_date(unary::to_serial_value(maturity_date))
+        : _serial_value_of_maturity_date(to_serial_value(maturity_date))
     {
     }
 
@@ -50,8 +50,8 @@ namespace qd { namespace binary { namespace dcc {
         const std::size_t to_m,
         const std::size_t to_d) const
     {
-        const int y = static_cast<int>(from_y) - static_cast<int>(to_y);
-        const int m = static_cast<int>(from_m) - static_cast<int>(to_m);
+        const int y = static_cast<int>(to_y) - static_cast<int>(from_y);
+        const int m = static_cast<int>(to_m) - static_cast<int>(from_m);
 
         const int adjusted_from_d 
             = unary::detail::is_last_day_of_month_impl(from_y, from_m, from_d)
@@ -69,7 +69,7 @@ namespace qd { namespace binary { namespace dcc {
                 ? to_d
                 : 30
             : to_d;
-        const int d = adjusted_from_d - adjusted_to_d;
+        const int d = adjusted_to_d - adjusted_from_d;
 
         return y + m / 12. + d / 360.;
     }

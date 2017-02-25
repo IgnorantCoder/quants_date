@@ -7,6 +7,9 @@ namespace qd { namespace unary {
         using expression_type = E;
 
     public:
+        virtual ~unary_expression() = default;
+
+    public:
         void apply(
             const std::size_t y,
             const std::size_t m,
