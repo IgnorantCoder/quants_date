@@ -4,6 +4,7 @@
 
 #include "quants_date/date.h"
 #include "quants_date/unary.h"
+#include "quants_date/binary.h"
 
 #include "quants_date/builder/date_builder.h"
 #include "quants_date/builder/date_range_builder.h"
@@ -54,7 +55,7 @@ namespace qd { namespace builder {
 
 void test_compare(const qd::date<Date>& d0, const qd::date<Date>& d1);
 void test_unary(const qd::date<Date>& d);
-void test_binary(const qd::date<Date>& d0, const qd::date<Date>& d1);
+void test_binary(const qd::date_range<Date>& range);
 
 int main()
 {
@@ -71,12 +72,8 @@ int main()
     const auto r = qd::create_date_range<Date>(
         std::make_tuple(2000u, 1u, 15u),
         std::make_tuple(2000u, 4u, 15u));
-    const auto ret = qd::day_count_fraction(
-        r,
-        qd::binary::dcc::actual_actual_icma<
-            Date,
-            qd::binary::dcc::quarterly
-        >(qd::create_date<Date>(2000, 4, 17)));
+
+    test_binary(r);
 
     return 0;
 }
@@ -104,6 +101,45 @@ void test_unary(const qd::date<Date>& d)
     std::cout << std::boolalpha << qd::is_leap_year(d) << std::endl;
 }
 
-void test_binary(const qd::date<Date>& d0, const qd::date<Date>& d1)
+void test_binary(const qd::date_range<Date>& range)
 {
+    std::cout << qd::count_days(range) << std::endl;
+    std::cout
+        << qd::day_count_fraction(
+            range,
+            qd::binary::dcc::actual_360()) << std::endl;
+    std::cout
+        << qd::day_count_fraction(
+            range,
+            qd::binary::dcc::actual_365_fixed()) << std::endl;
+    std::cout
+        << qd::day_count_fraction(
+            range,
+            qd::binary::dcc::actual_actual()) << std::endl;
+    std::cout 
+        << qd::day_count_fraction(
+            range, 
+            qd::binary::dcc::one_one()) << std::endl;
+    std::cout
+        << qd::day_count_fraction(
+            range, 
+            qd::binary::dcc::thirty_360_bond_basis()) << std::endl;
+    std::cout 
+        << qd::day_count_fraction(
+            range, 
+            qd::binary::dcc::thirty_e_360()) << std::endl;
+
+    const auto additional = qd::create_date<Date>(2000u, 4u, 15u);
+    std::cout
+        << qd::day_count_fraction(
+            range, 
+            qd::binary::dcc::thirty_e_360_isda(additional)) << std::endl;
+    std::cout
+        << qd::day_count_fraction(
+            range, 
+            qd::binary::dcc::actual_365l<qd::binary::dcc::monthly>()) << std::endl;
+    std::cout
+        << qd::day_count_fraction(
+            range, 
+            qd::binary::dcc::actual_actual_icma<qd::binary::dcc::quarterly>(additional)) << std::endl;
 }

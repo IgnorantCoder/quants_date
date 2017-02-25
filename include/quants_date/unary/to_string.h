@@ -1,9 +1,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "quants_date/date.h"
 #include "quants_date/unary/unary_expression.h"
+#include "quants_date/string_algorithm/join.h"
 
 namespace qd { namespace unary {
     template <char delim>
@@ -47,9 +49,13 @@ namespace qd { namespace unary {
         const std::size_t m, 
         const std::size_t d) const
     {
-        this->_result = std::to_string(y)
-            + delim + std::to_string(m)
-            + delim + std::to_string(d);
+        this->_result = string_alg::join(
+            {            
+                std::to_string(y),
+                std::to_string(m),
+                std::to_string(d)
+            },
+            delim);
     }
 }}
 

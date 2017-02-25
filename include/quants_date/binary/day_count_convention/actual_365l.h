@@ -11,7 +11,7 @@
 namespace qd { namespace binary { namespace dcc {
     template <typename F>
     struct coefficient_of_actual_365l {
-        static std::size_t value(
+        static double value(
             const std::size_t from_y,
             const std::size_t from_m,
             const std::size_t from_d,
@@ -27,7 +27,7 @@ namespace qd { namespace binary { namespace dcc {
 
     template <>
     struct coefficient_of_actual_365l<annual> {
-        static std::size_t value(
+        static double value(
             const std::size_t from_y,
             const std::size_t from_m,
             const std::size_t from_d,
