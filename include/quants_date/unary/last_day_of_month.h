@@ -19,7 +19,7 @@ namespace qd { namespace unary {
         result_type get() const;
 
     private:
-        void doApply(
+        void do_apply(
             const std::size_t y,
             const std::size_t m,
             const std::size_t /*d*/) const;
@@ -39,13 +39,12 @@ namespace qd { namespace unary {
         return this->_result;
     }
 
-    void last_day_of_month_calculator::doApply(
+    void last_day_of_month_calculator::do_apply(
         const std::size_t y, 
         const std::size_t m,
         const std::size_t /*d*/) const
     {
-        this->_result 
-            = detail::the_number_of_days_data::value(y, m);
+        this->_result = detail::last_day_of_month_impl(y, m);
     }
 }}
 

@@ -17,7 +17,7 @@ namespace qd { namespace unary {
         result_type get() const;
 
     private:
-        void doApply(
+        void do_apply(
             const std::size_t y,
             const std::size_t m,
             const std::size_t d) const;
@@ -39,7 +39,7 @@ namespace qd { namespace unary {
     }
 
     template<typename D>
-    inline void week_adder<D>::doApply(
+    inline void week_adder<D>::do_apply(
         const std::size_t y,
         const std::size_t m, 
         const std::size_t d) const

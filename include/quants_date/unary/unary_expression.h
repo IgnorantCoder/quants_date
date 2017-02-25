@@ -1,9 +1,5 @@
 #pragma once
 
-#include <type_traits>
-
-#include "quants_date/type_traits/is_date_compatible.h"
-
 namespace qd { namespace unary {
     template <typename E>
     class unary_expression {
@@ -28,7 +24,7 @@ namespace qd { namespace unary {
         const std::size_t m, 
         const std::size_t d)
     {
-        static_cast<expression_type&>(*this).doApply(y, m, d);
+        static_cast<expression_type&>(*this).do_apply(y, m, d);
         return;
     }
 
@@ -38,7 +34,7 @@ namespace qd { namespace unary {
         const std::size_t m,
         const std::size_t d) const
     {
-        static_cast<const expression_type&>(*this).doApply(y, m, d);
+        static_cast<const expression_type&>(*this).do_apply(y, m, d);
         return;
     }
 }}
