@@ -7,16 +7,20 @@
 #include "quants_date/unary/to_serial_value.h"
 #include "quants_date/unary/is_last_day_of_month.h"
 #include "quants_date/unary/detail/the_sum_of_days_data.h"
+#include "quants_date/binary/fwd.h"
 #include "quants_date/binary/day_count_convention/day_count_convention_expression.h"
 
 namespace qd { namespace binary { namespace dcc {
-    class thirty_e_360_isda : public day_count_convention_expression<thirty_e_360_isda> {
+    class thirty_e_360_isda 
+        : public day_count_convention_expression<thirty_e_360_isda> {
+        friend class day_count_fraction<thirty_e_360_isda>;
+
     public:
         template <typename D>
         thirty_e_360_isda(const date<D>& maturity_date);
         thirty_e_360_isda(const thirty_e_360_isda& other);
 
-    public:
+    private:
         double calculate_day_count(
             const std::size_t from_y,
             const std::size_t from_m,
