@@ -1,6 +1,12 @@
 #pragma once
 
+#include <string>
 #include <type_traits>
+#include <limits>
+
+#include "quants_date/string_algorithm/to_lower.h"
+#include "quants_date/binary/day_count_convention/constant_value.h"
+#include "quants_date/binary/day_count_convention/type_erasure.h"
 
 namespace qd { namespace binary { namespace dcc {
     class annual : public std::integral_constant<std::size_t, 1> {
@@ -37,4 +43,27 @@ namespace qd { namespace binary { namespace dcc {
 
     template <>
     struct is_pay_frequency<monthly> : public std::true_type {};
+
+    template<typename B>
+    type_erased_wrapper create_type_erasure(
+        const B& builder,
+        const std::string& frequency)
+    {
+        const auto lower_case_frequency
+            = string_alg::to_lower(frequency);
+        if ("annual" == lower_case_frequency) {
+            return builder.create<annual>();
+        }
+        if ("semi-annual" == lower_case_frequency) {
+            return builder.create<semi_annual>();
+        }
+        if ("quarterly" == lower_case_frequency) {
+            return builder.create<quarterly>();
+        }
+        if ("monthly" == lower_case_frequency) {
+            builder.create<monthly>();
+        }
+        return type_erased_wrapper(
+            constant_value(std::numeric_limits<double>::quiet_NaN()));
+    }
 }}}

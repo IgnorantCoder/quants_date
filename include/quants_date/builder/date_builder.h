@@ -7,10 +7,25 @@
 
 namespace qd { namespace builder {
     template <typename D>
-    struct create_from_ymd_traits;
+    struct create_from_ymd_traits {
+        using result_type = D;
+        static result_type apply(
+            const std::size_t y,
+            const std::size_t m,
+            const std::size_t d)
+        {
+            return result_type(y, m, d);
+        }
+    };
 
     template <typename D>
-    struct create_null_object_traits;
+    struct create_null_object_traits {
+        using result_type = D;
+        static result_type apply()
+        {
+            return result_type();
+        }
+    };
 }}
 
 namespace qd {

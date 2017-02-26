@@ -3,11 +3,14 @@
 #include <cstddef>
 
 #include "quants_date/unary/detail/is_leap_year_impl.h"
+#include "quants_date/binary/fwd.h"
 #include "quants_date/binary/detail/count_days_impl.h"
 #include "quants_date/binary/day_count_convention/day_count_convention_expression.h"
 
 namespace qd { namespace binary { namespace dcc {
     class actual_360 : public day_count_convention_expression<actual_360> {
+        friend class day_count_fraction<actual_360>;
+
     private:
         static constexpr double coeffcient = 1. / 360.;
 
@@ -15,7 +18,7 @@ namespace qd { namespace binary { namespace dcc {
         actual_360();
         actual_360(const actual_360& other);
 
-    public:
+    private:
         double calculate_day_count(
             const std::size_t from_y,
             const std::size_t from_m,

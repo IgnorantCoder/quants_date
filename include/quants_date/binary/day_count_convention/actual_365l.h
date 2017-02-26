@@ -3,6 +3,8 @@
 #include <cstddef>
 
 #include "quants_date/unary/detail/is_leap_year_impl.h"
+#include "quants_date/binary/fwd.h"
+#include "quants_date/binary/day_count_convention/type_erasure.h"
 #include "quants_date/binary/day_count_convention/day_count_convention_expression.h"
 #include "quants_date/binary/day_count_convention/pay_frequency.h"
 #include "quants_date/binary/detail/count_days_impl.h"
@@ -36,7 +38,7 @@ namespace qd { namespace binary { namespace dcc {
             const std::size_t to_d)
         {
             const bool is_include_february_29th
-                = detail::is_include_february_29th_impl(
+                = binary::detail::is_include_february_29th_impl(
                     from_y, from_m, from_d,
                     to_y, to_m, to_d);
             const double dominator
@@ -48,6 +50,8 @@ namespace qd { namespace binary { namespace dcc {
     template <typename F>
     class actual_365l 
         : public day_count_convention_expression<actual_365l<F>> {
+        friend class day_count_fraction<actual_365l<F>>;
+
     public:
         using frequency_type = F;
 
@@ -59,7 +63,7 @@ namespace qd { namespace binary { namespace dcc {
         actual_365l();
         actual_365l(const actual_365l& other);
 
-    public:
+    private:
         double calculate_day_count(
             const std::size_t from_y,
             const std::size_t from_m,
@@ -89,10 +93,23 @@ namespace qd { namespace binary { namespace dcc {
         const std::size_t to_d) const
     {
         const double numerator
-            = detail::count_days_impl(from_y, from_m, from_d, to_y, to_m, to_d);
+            = binary::detail::count_days_impl(from_y, from_m, from_d, to_y, to_m, to_d);
         const double coeffcient
             = coefficient_of_actual_365l<frequency_type>::value(
                 from_y, from_m, from_d, to_y, to_m, to_d);
         return numerator * coeffcient;
+    }
+
+    class actual_365l_builder {
+    public:
+        template <typename F>
+        type_erased_wrapper create() const;
+    };
+
+    template<typename F>
+    inline type_erased_wrapper actual_365l_builder::create() const
+    {
+        auto&& conv = actual_365l<F>();
+        return type_erased_wrapper(conv);
     }
 }}}

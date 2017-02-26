@@ -3,12 +3,15 @@
 #include <cstddef>
 
 #include "quants_date/unary/detail/is_leap_year_impl.h"
+#include "quants_date/binary/fwd.h"
 #include "quants_date/binary/detail/count_days_impl.h"
 #include "quants_date/binary/day_count_convention/day_count_convention_expression.h"
 
 namespace qd { namespace binary { namespace dcc {
     class actual_actual
         : public day_count_convention_expression<actual_actual> {
+        friend class day_count_fraction<actual_actual>;
+
     private:
         static constexpr double leap_year_coeffcient = 1. / 366.;
         static constexpr double noleap_year_coeffcient = 1. / 365.;
@@ -17,7 +20,7 @@ namespace qd { namespace binary { namespace dcc {
         actual_actual();
         actual_actual(const actual_actual& other);
 
-    public:
+    private:
         double calculate_day_count(
             const std::size_t from_y,
             const std::size_t from_m,
@@ -49,7 +52,7 @@ namespace qd { namespace binary { namespace dcc {
             + 1;
 
         const int from_odd
-            = detail::count_days_impl(
+            = binary::detail::count_days_impl(
                 from_y, from_m, from_d,
                 from_y, 12, 31)
             + 1;
@@ -59,7 +62,7 @@ namespace qd { namespace binary { namespace dcc {
             : noleap_year_coeffcient;
 
         const int to_odd
-            = detail::count_days_impl(
+            = binary::detail::count_days_impl(
                 to_y, 1, 1,
                 to_y, to_m, to_d)
             + 1;
