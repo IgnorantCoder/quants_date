@@ -1,13 +1,11 @@
 #include <iostream>
-
 #include <tuple>
 
-#include "quants_date/date.h"
-#include "quants_date/unary.h"
 #include "quants_date/binary.h"
-
-#include "quants_date/builder/date_builder.h"
-#include "quants_date/builder/date_range_builder.h"
+#include "quants_date/builder.h"
+#include "quants_date/date.h"
+#include "quants_date/date_range.h"
+#include "quants_date/unary.h"
 
 class Date {
 public:
@@ -29,29 +27,6 @@ private:
     std::size_t _m;
     std::size_t _d;
 };
-
-namespace qd { namespace builder {
-    template <>
-    struct create_null_object_traits<Date> {
-        using result_type = Date;
-        static result_type apply()
-        {
-            return result_type();
-        }
-    };
-
-    template <>
-    struct create_from_ymd_traits<Date> {
-        using result_type = Date;
-        static result_type apply(
-            const std::size_t y,
-            const std::size_t m,
-            const std::size_t d)
-        {
-            return result_type(y, m, d);
-        }
-    };
-}}
 
 void test_compare(const qd::date<Date>& d0, const qd::date<Date>& d1);
 void test_unary(const qd::date<Date>& d);
@@ -104,42 +79,15 @@ void test_unary(const qd::date<Date>& d)
 void test_binary(const qd::date_range<Date>& range)
 {
     std::cout << qd::count_days(range) << std::endl;
-    std::cout
-        << qd::day_count_fraction(
-            range,
-            qd::binary::dcc::actual_360()) << std::endl;
-    std::cout
-        << qd::day_count_fraction(
-            range,
-            qd::binary::dcc::actual_365_fixed()) << std::endl;
-    std::cout
-        << qd::day_count_fraction(
-            range,
-            qd::binary::dcc::actual_actual()) << std::endl;
-    std::cout 
-        << qd::day_count_fraction(
-            range, 
-            qd::binary::dcc::one_one()) << std::endl;
-    std::cout
-        << qd::day_count_fraction(
-            range, 
-            qd::binary::dcc::thirty_360_bond_basis()) << std::endl;
-    std::cout 
-        << qd::day_count_fraction(
-            range, 
-            qd::binary::dcc::thirty_e_360()) << std::endl;
+    std::cout << qd::year_fraction_actual_360(range) << std::endl;
+    std::cout << qd::year_fraction_actual_365_fixed(range) << std::endl;
+    std::cout << qd::year_fraction_actual_actual(range) << std::endl;
+    std::cout << qd::year_fraction_one_one(range) << std::endl;
+    std::cout << qd::year_fraction_30_360_bond_basis(range) << std::endl;
+    std::cout << qd::year_fraction_30e_360(range) << std::endl;
 
     const auto additional = qd::create_date<Date>(2000u, 4u, 15u);
-    std::cout
-        << qd::day_count_fraction(
-            range, 
-            qd::binary::dcc::thirty_e_360_isda(additional)) << std::endl;
-    std::cout
-        << qd::day_count_fraction(
-            range, 
-            qd::binary::dcc::actual_365l<qd::binary::dcc::monthly>()) << std::endl;
-    std::cout
-        << qd::day_count_fraction(
-            range, 
-            qd::binary::dcc::actual_actual_icma<qd::binary::dcc::quarterly>(additional)) << std::endl;
+    std::cout << qd::year_fraction_30e_360_isda(range, additional) << std::endl;
+    std::cout << qd::year_fraction_actual_365l(range, "quarterly") << std::endl;
+    std::cout << qd::year_fraction_actual_actual_icma(range, additional, "quarterly") << std::endl;
 }
