@@ -69,9 +69,9 @@ int main()
     test_unary(qd::create_date<Date>(2000, 2, 29));
     test_unary(qd::create_date<Date>(2013, 6, 1));
 
-    const auto r = qd::create_date_range<Date>(
-        std::make_tuple(2000u, 1u, 15u),
-        std::make_tuple(2000u, 4u, 15u));
+    const auto r = qd::create_date_range(
+        qd::create_date<Date>(2000u, 1u, 15u),
+        qd::create_date<Date>(2000u, 4u, 15u));
 
     test_binary(r);
 
