@@ -76,4 +76,15 @@ namespace qd {
             from_y, from_m, from_d,
             to_y, to_m, to_d);
     }
+
+    template <typename DateType>
+    auto create_date_range(
+        const DateType& from,
+        const DateType& to)
+        -> decltype(create_date_range<typename DateType::inner_date_type>(0u, 0u))
+    {
+        return create_date_range<typename DateType::inner_date_type>(
+            qd::to_serial_value(from),
+            qd::to_serial_value(to));
+    }
 }

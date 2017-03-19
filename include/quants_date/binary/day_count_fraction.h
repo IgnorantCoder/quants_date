@@ -16,7 +16,7 @@
 #include "quants_date/binary/day_count_convention/actual_365l.h"
 #include "quants_date/binary/day_count_convention/actual_actual.h"
 #include "quants_date/binary/day_count_convention/actual_actual_icma.h"
-#include "quants_date/binary/day_count_convention/one_one.h"
+#include "quants_date/binary/day_count_convention/constant_value.h"
 #include "quants_date/binary/day_count_convention/thirty_360_bond_basis.h"
 #include "quants_date/binary/day_count_convention/thirty_e_360.h"
 #include "quants_date/binary/day_count_convention/thirty_e_360_isda.h"
@@ -144,12 +144,12 @@ namespace qd {
     }
 
     template<typename D>
-    typename binary::day_count_fraction<binary::dcc::one_one>::result_type
+    typename binary::day_count_fraction<binary::dcc::constant_value>::result_type
     year_fraction_one_one(const date_range<D>& range)
     {
         return qd::day_count_fraction(
             range,
-            binary::dcc::one_one());
+            binary::dcc::constant_value(1.0));
     }
 
     template<typename D>

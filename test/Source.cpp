@@ -1,11 +1,14 @@
 #include <iostream>
 #include <tuple>
 
-#include "quants_date/binary.h"
 #include "quants_date/builder.h"
 #include "quants_date/date.h"
 #include "quants_date/date_range.h"
+#include "quants_date/schedule.h"
 #include "quants_date/unary.h"
+#include "quants_date/binary.h"
+#include "quants_date/scheduler/add.h"
+#include "quants_date/scheduler/concat.h"
 
 class Date {
 public:
@@ -44,11 +47,23 @@ int main()
     test_unary(qd::create_date<Date>(2000, 2, 29));
     test_unary(qd::create_date<Date>(2013, 6, 1));
 
-    const auto r = qd::create_date_range<Date>(
-        std::make_tuple(2000u, 1u, 15u),
-        std::make_tuple(2000u, 4u, 15u));
+    const auto r = qd::create_date_range(
+        qd::create_date<Date>(2000u, 1u, 15u),
+        qd::create_date<Date>(2000u, 4u, 15u));
 
     test_binary(r);
+
+    qd::schedule<Date> schedule0;
+    qd::add(schedule0, qd::create_date<Date>(2000, 2, 29));
+    qd::add(schedule0, qd::create_date<Date>(2000, 5, 1));
+
+    qd::schedule<Date> schedule1;
+    qd::add(schedule1, qd::create_date<Date>(2001, 2, 29));
+    qd::add(schedule1, qd::create_date<Date>(2001, 2, 29));
+    qd::add(schedule1, qd::create_date<Date>(2002, 5, 1));
+
+    qd::concat(schedule0, schedule1);
+
 
     return 0;
 }
