@@ -2,6 +2,7 @@
 
 #include "quants_date/detail/schedule_type.h"
 #include "quants_date/scheduler/modifier_expression.h"
+#include "quants_date/scheduler/selector_expression.h"
 
 namespace qd {
     template <typename D>
@@ -21,6 +22,10 @@ namespace qd {
         void accept(scheduler::modifier_expression<E>& visitor);
         template <typename E>
         void accept(const scheduler::modifier_expression<E>& visitor);
+        template <typename E>
+        void accept(scheduler::selector_expression<E>& visitor) const;
+        template <typename E>
+        void accept(const scheduler::selector_expression<E>& visitor) const;
 
     private:
         container_type _data;
@@ -57,6 +62,24 @@ namespace qd {
     template<typename E>
     inline void schedule<D>::accept(
         const scheduler::modifier_expression<E>& visitor)
+    {
+        visitor.apply<inner_date_type>(_data);
+        return;
+    }
+
+    template<typename D>
+    template<typename E>
+    inline void qd::schedule<D>::accept(
+        scheduler::selector_expression<E>& visitor) const
+    {
+        visitor.apply<inner_date_type>(_data);
+        return;
+    }
+
+    template<typename D>
+    template<typename E>
+    inline void qd::schedule<D>::accept(
+        const scheduler::selector_expression<E>& visitor) const
     {
         visitor.apply<inner_date_type>(_data);
         return;

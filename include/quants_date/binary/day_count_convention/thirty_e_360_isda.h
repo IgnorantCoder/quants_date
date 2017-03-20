@@ -60,7 +60,7 @@ namespace qd { namespace binary { namespace dcc {
         const int adjusted_from_d 
             = unary::detail::is_last_day_of_month_impl(from_y, from_m, from_d)
             ? 30
-            : from_d;
+            : static_cast<int>(from_d);
         const auto serial_value_of_to_date
             = unary::detail::to_serial_value_impl(to_y, to_m, to_d);
         const bool is_to_date_maturity_date
@@ -70,9 +70,9 @@ namespace qd { namespace binary { namespace dcc {
         const int adjusted_to_d
             = unary::detail::is_last_day_of_month_impl(to_y, to_m, to_d)
             ? is_to_date_maturity_date || is_to_date_february
-                ? to_d
+                ? static_cast<int>(to_d)
                 : 30
-            : to_d;
+            : static_cast<int>(to_d);
         const int d = adjusted_to_d - adjusted_from_d;
 
         return y + m / 12. + d / 360.;
