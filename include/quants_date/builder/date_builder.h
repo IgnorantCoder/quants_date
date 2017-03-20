@@ -74,4 +74,18 @@ namespace qd {
 
         return create_date<D>(y, m, d);
     }
+
+    template <typename D>
+    auto create_min()
+        -> decltype(create_date<D>(1900, 1, 1))
+    {
+        return create_date<D>(1900, 1, 1);
+    }
+
+    template <typename D>
+    auto create_max()
+        -> decltype(create_date<D>(1900, 1, 1))
+    {
+        return create_date<D>(2199, 12, 31);
+    }
 }

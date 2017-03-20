@@ -80,7 +80,7 @@ namespace qd { namespace binary { namespace dcc {
             = binary::detail::count_days_impl(from_y, from_m, from_d, to_y, to_m, to_d);
         const double dominator
             = this->_serial_value_of_payment_date
-            - unary::detail::to_serial_value_impl(from_y, from_m, from_d);
+            - static_cast<double>(unary::detail::to_serial_value_impl(from_y, from_m, from_d));
         const double coeffcient
             = frequency_type::coupon_factor / dominator;
         return numerator * coeffcient;

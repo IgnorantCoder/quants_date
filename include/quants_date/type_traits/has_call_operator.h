@@ -2,20 +2,15 @@
 
 #include <type_traits>
 #include <utility>
+#include "quants_date/type_traits/is_detected.h"
 
 namespace qd { namespace type_traits {
-    template <typename T, typename... A>
-    class has_call_operator {
-    private:
-        template <typename U, typename... P>
-        static auto check(U u, P... p) -> decltype(u(p...), std::true_type());
-        static auto check(...) -> decltype(std::false_type());
+    template <typename T, typename... Args>
+    using call_operator_type 
+        = decltype(std::declval<T>()(std::declval<Args>()...));
 
-    public:
-        using type
-            = decltype(check(std::declval<T>(), std::declval<A>()...));
-        static constexpr bool value = type::value;
-    };
+    template <typename T, typename... Args>
+    using has_call_operator = is_detected<call_operator_type, T, Args... >;
 
     template <typename T, typename A>
     class has_unary_operator : public has_call_operator<T, A> {};

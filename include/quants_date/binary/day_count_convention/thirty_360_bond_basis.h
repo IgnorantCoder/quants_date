@@ -49,7 +49,7 @@ namespace qd { namespace binary { namespace dcc {
         const int adjusted_to_d
             = adjusted_from_d == 30
             ? std::min(static_cast<int>(to_d), 30)
-            : to_d;
+            : static_cast<int>(to_d);
         const int d = adjusted_to_d - adjusted_from_d;
 
         return y + m / 12. + d / 360.;
